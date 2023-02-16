@@ -8,22 +8,37 @@ SoftwareSerial printer_connection(RX_PIN, TX_PIN);
 Adafruit_Thermal printer(&printer_connection);
 
 void setup()
-{  
-  printer_connection.begin(9600);
+{
+  // This line is for compatibility with the Adafruit IotP project pack,
+  // which uses pin 7 as a spare grounding point.  You only need this if
+  // wired up the same way (w/3-pin header into pins 5/6/7):
+  pinMode(7, OUTPUT); digitalWrite(7, LOW);
+
+  printer_connection.begin(19200);
   printer.begin();
 
-  printer.setFont('B');
-  printer.println("Hello, World!");
   printer.setFont('A');
-  printer.println("Hello, World!");
-
-  printer.inverseOn();
-  printer.println(F("Good Bye, World!"));
-  printer.inverseOff();
-
+  printer.justify('C');
+  printer.setSize('L');
+  printer.boldOn();
   printer.doubleHeightOn();
-  printer.println(F("Large Text"));
+  printer.println(F("BinG"));
   printer.doubleHeightOff();
+  printer.boldOff();
+  printer.setSize('S');
+  printer.println(F("Made in Nimai"));
+  printer.println(F("--------------------------------"));
+  printer.justify('L');
+  printer.println(F("Opgenomenbedrag: "));
+  printer.println(F("Type kaart: "));
+  printer.println(F("Pasnummer: "));
+  printer.println(F("Datum: \nTijd: "));
+  printer.justify('C');
+  printer.println(F("--------------------------------"));
+  printer.setSize('L');
+  printer.boldOn();
+  printer.doubleHeightOn();
+  printer.println(F("Bedankt!\n Tot ziens! :)"));
 }
 
 void loop() { }

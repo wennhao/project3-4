@@ -22,15 +22,15 @@ void setup()
   printer.setSize('L');
   printer.boldOn();
   printer.doubleHeightOn();
-  printer.println(F("BinG"));
+  printer.println(F("    \nBinG\n"));
   printer.doubleHeightOff();
   printer.boldOff();
   printer.setSize('S');
-  printer.println(F("Made in Nimai"));
+  printer.println(F("Wijnhaven 107, Rotterdam"));
   printer.println(F("--------------------------------"));
   printer.justify('L');
-  printer.println(F("Opgenomenbedrag: "));
-  printer.println(F("Type kaart: "));
+  printer.println(F("Opgenomen bedrag: "));
+  printer.println(F("IBAN: XXXXXXXXXXXXXXX-0979"));
   printer.println(F("Pasnummer: "));
   printer.println(F("Datum: \nTijd: "));
   printer.justify('C');
@@ -38,7 +38,7 @@ void setup()
   printer.setSize('L');
   printer.boldOn();
   printer.doubleHeightOn();
-  printer.println(F("Bedankt!\n Tot ziens! :)"));
+  printer.println(F("     \nBedankt!\n Tot ziens! :)\n   \n   \n"));
 }
 
 void loop() { }

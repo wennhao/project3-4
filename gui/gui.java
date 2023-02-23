@@ -4,7 +4,7 @@ class gui{
         JFrame frame = new JFrame("Bin.G Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300,300);
-        JButton button = new JButton("HOI");
+        JButton button = new JButton("NIMAI IS MOOIBOY");
         frame.getContentPane().add(button); // Adds Button to content pane of frame
         frame.setVisible(true);
     }

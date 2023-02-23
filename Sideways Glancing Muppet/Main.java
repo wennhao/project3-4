@@ -6,7 +6,7 @@ class Main {
   public static void main(String[] args) {
 	  
 	//Declaratie van de JFram, een JPanel met een CardLayout, twee Panels om als cards te fungeren, en zet alle LayoutManagers.
-    JFrame frame = new JFrame("Demoframe");
+    JFrame frame = new JFrame("Demofrnimaiframeame");
     frame.setLayout(new FlowLayout());
     JPanel cards = new JPanel(new CardLayout());
     JPanel card1 = new ImagePanel("muppet1.PNG");

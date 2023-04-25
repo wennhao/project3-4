@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class MainFrame extends JFrame {
-    public MainFrame() {
-
+class SnelOpnemen extends JFrame{
+    public SnelOpnemen() {
+        
         setSize(1920, 1080);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // close this frame only
+        setLayout(new GridLayout(1, 5));
+        getContentPane().setBackground(new Color(252, 212, 68)); // set the background color
+    
         JPanel mainPanel = new JPanel(new GridLayout(1, 5));
         mainPanel.setBackground(Color.BLACK);
         mainPanel.setPreferredSize(new Dimension(1500, 1080));
@@ -17,34 +19,37 @@ class MainFrame extends JFrame {
         leftPanel.setBackground(new Color(252, 212, 68));
 
         leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
-        // Add buttons to left panel
-        JButton button1 = new JButton("Saldo Checken");
-        button1.setFont(new Font("Arial", Font.BOLD, 30));
-        button1.setPreferredSize(new Dimension(20, 50));
-        button1.setBackground(Color.WHITE);
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Code to open a new frame for Button 1
-            }
-        });
-        leftPanel.add(button1);
+
         leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
-        leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
+        
         leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
 
-
-        JButton button2 = new JButton("Afbreken");
-        button2.setFont(new Font("Arial", Font.BOLD, 30));
-        button2.setPreferredSize(new Dimension(20, 50));
-        button2.setBackground(Color.WHITE);
-        button2.addActionListener(new ActionListener() {
+        JButton buttonBack = new JButton("Terug");
+        buttonBack.setFont(new Font("Arial", Font.BOLD, 30));
+        buttonBack.setPreferredSize(new Dimension(20, 50));
+        buttonBack.setBackground(Color.WHITE);
+        buttonBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            // Code to open a new frame for Button 2
+            // Code to open a new frame for Button on the leftside corner.
             dispose();
-            new StartFrame();
+            new MainFrame();
             }
         });
-        leftPanel.add(button2);
+        leftPanel.add(buttonBack);
+        leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
+
+
+        JButton buttonAfbreken = new JButton("Afbreken");
+        buttonAfbreken.setFont(new Font("Arial", Font.BOLD, 30));
+        buttonAfbreken.setPreferredSize(new Dimension(20, 50));
+        buttonAfbreken.setBackground(Color.WHITE);
+        buttonAfbreken.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            // Code to open a new frame for Button on the leftside corner.
+            dispose();
+            }
+        });
+        leftPanel.add(buttonAfbreken);
         leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
         
         mainPanel.add(leftPanel); // add your left panel
@@ -66,7 +71,8 @@ class MainFrame extends JFrame {
         JLabel imageLabel = new JLabel(imageIcon);
         // Add the JLabel to the center panel
         centerPanel.add(imageLabel);
-        JLabel keuzeLabel = new JLabel("Welkom\n maak uw keuze");
+        JLabel keuzeLabel = new JLabel("Snel Opnemen", SwingConstants.CENTER);
+        //keuzeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         keuzeLabel.setFont(new Font("Arial", Font.BOLD, 40));
         centerPanel.add(keuzeLabel);
         mainPanel.add(centerPanel);
@@ -83,46 +89,42 @@ class MainFrame extends JFrame {
         rightPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
 
         // Add buttons to right panel
-        JButton button3 = new JButton("Snel Opnemen");
-        button3.setFont(new Font("Arial", Font.BOLD, 30));
-        button3.setPreferredSize(new Dimension(20, 50));
-        button3.setBackground(Color.WHITE);
-        button3.addActionListener(new ActionListener() {
+        JButton button70 = new JButton("70 euro");
+        button70.setFont(new Font("Arial", Font.BOLD, 30));
+        button70.setPreferredSize(new Dimension(20, 50));
+        button70.setBackground(Color.WHITE);
+        button70.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Code to open a new frame for Button 3
-                dispose();
-                new SnelOpnemen();
+                // Code to open a new frame for on the top right
             }
         });
-        rightPanel.add(button3);
+        rightPanel.add(button70);
 
         rightPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
         
-        JButton button4 = new JButton("Opnemen");
-        button4.setFont(new Font("Arial", Font.BOLD, 30));
-        button4.setPreferredSize(new Dimension(20, 50));
-        button4.setBackground(Color.WHITE);
-        button4.addActionListener(new ActionListener() {
+        JButton button50 = new JButton("50 euro");
+        button50.setFont(new Font("Arial", Font.BOLD, 30));
+        button50.setPreferredSize(new Dimension(20, 50));
+        button50.setBackground(Color.WHITE);
+        button50.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Code to open a new frame for Button 4
+                // Code to open a new frame for on the middle right
             }
         });
-        rightPanel.add(button4);
+        rightPanel.add(button50);
 
         rightPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
 
-        JButton button5 = new JButton("Afbreken");
-        button5.setFont(new Font("Arial", Font.BOLD, 30));
-        button5.setPreferredSize(new Dimension(20, 50));
-        button5.setBackground(Color.WHITE);
-        button5.addActionListener(new ActionListener() {
+        JButton button20 = new JButton("20 euro");
+        button20.setFont(new Font("Arial", Font.BOLD, 30));
+        button20.setPreferredSize(new Dimension(20, 50));
+        button20.setBackground(Color.WHITE);
+        button20.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Code to open a new frame for Button 5
-                dispose();
-                new StartFrame();
+                // Code to open a new frame for on the bottom right
             }
         });
-        rightPanel.add(button5);
+        rightPanel.add(button20);
 
         rightPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
         mainPanel.add(rightPanel);
@@ -130,5 +132,5 @@ class MainFrame extends JFrame {
         setContentPane(mainPanel);
         setVisible(true);
     }
+    
 }
-

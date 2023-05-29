@@ -3,85 +3,111 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class StartFrame extends JFrame implements ActionListener {
-    private JTextField pinField;
-    private JLabel resultLabel;
-    private int triesLeft = 3;
-
+public class StartFrame extends JFrame {
+    private JLabel titleLabel;
+    private JPasswordField passcodeField;
+    private JButton submitButton;
+    private int wrongAttempts;
+    private int maxAttempts = 3;
 
     public StartFrame() {
-        setSize(1920, 1080);
+        setTitle("StartFrame");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1900, 845);
+        getContentPane().setBackground(new Color(252, 212, 68));
+        setLayout(new BorderLayout());
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(new Color(252, 212, 68));
 
-        JLabel titleLabel = new JLabel("Enter 4-digit PIN:");
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setBackground(new Color(252, 212, 68));
+        titleLabel = new JLabel("Voer uw pincode in");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 200)));
-        mainPanel.add(titleLabel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 100)));
-        mainPanel.setBackground(new Color( 252, 212, 68));
+        titlePanel.add(titleLabel);
+        centerPanel.add(titlePanel, BorderLayout.NORTH);
 
-        JPanel pinPanel = new JPanel();
-        pinPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        pinPanel.setBackground(new Color( 252, 212, 68));
-        pinField = new JPasswordField(4);
-        pinField.setFont(new Font("Arial", Font.BOLD, 30));
-        pinField.setPreferredSize(new Dimension(120, 50));
-        
-        ((AbstractDocument)pinField.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offs, int length, String str, AttributeSet a) throws BadLocationException {
-                int newLength = fb.getDocument().getLength() - length + str.length();
-                if (newLength <= 4) {
-                    super.replace(fb, offs, length, str, a);
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        inputPanel.setBackground(new Color(252, 212, 68));
+
+        passcodeField = new JPasswordField(10);
+        passcodeField.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        // Set the document filter to allow only four alphanumeric characters
+        ((AbstractDocument) passcodeField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if (fb.getDocument().getLength() + string.length() <= 4 && string.matches("[a-zA-Z0-9]+")) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if (fb.getDocument().getLength() - length + text.length() <= 4 && text.matches("[a-zA-Z0-9]+")) {
+                    super.replace(fb, offset, length, text, attrs);
                 }
             }
         });
-        pinField.addActionListener(this);
-        pinPanel.add(pinField);
-        JButton enterButton = new JButton("Enter");
-        enterButton.setPreferredSize(new Dimension(150, 100));
-        enterButton.addActionListener(this);
-        pinPanel.add(enterButton);
-        mainPanel.add(pinPanel);
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 50)));
 
-        resultLabel = new JLabel();
-        resultLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        resultLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        resultLabel.add(Box.createRigidArea(new Dimension(0, 50)));
-        mainPanel.add(resultLabel);
+        inputPanel.add(passcodeField);
+        centerPanel.add(inputPanel, BorderLayout.CENTER);
 
-        setContentPane(mainPanel);
-        setVisible(true);
-    }
+        ImageIcon imageIcon = new ImageIcon("../gui/binglogo.PNG");
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Enter")) {
-            String pin = pinField.getText();
-            if (pin.length() == 4) {
-                if (pin.equals("1234")) {
-                    //JOptionPane.showMessageDialog(this, "Correct PIN!");
+        // Create a JLabel with the image
+        JLabel imageLabel = new JLabel(imageIcon);
+
+        // Create a panel with FlowLayout to center the imageLabel
+        JPanel imagePanel = new JPanel(new FlowLayout());
+        imagePanel.setBackground(new Color(252, 212, 68));
+        imagePanel.add(imageLabel);
+
+        // Add the imagePanel to the GUI
+        add(imagePanel, BorderLayout.NORTH);
+
+        submitButton = new JButton("Submit");
+        submitButton.setFont(new Font("Arial", Font.BOLD, 30));
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                char[] passcodeChars = passcodeField.getPassword();
+                String passcode = new String(passcodeChars);
+                if (passcode.equals("1234")) {
+                    // Correct pin code
                     dispose();
+                    // Open the next frame or perform any desired action
                     new MainFrame();
                 } else {
-                    triesLeft--;
-                    if (triesLeft == 0) {
-                        resultLabel.setText("No more attempts left!");
-                        pinField.setEnabled(false);
-                        ((JButton) e.getSource()).setEnabled(false);
+                    // Incorrect pin code
+                    wrongAttempts++;
+                    int remainingAttempts = maxAttempts - wrongAttempts;
+                    if (remainingAttempts > 0) {
+                        titleLabel.setText("Voer uw pincode in (" + remainingAttempts + " pogingen over)");
+                        passcodeField.setText(""); // Clear the passcode field
                     } else {
-                        resultLabel.setText("Incorrect PIN! " + triesLeft + " tries left.");
-                        pinField.setText("");
+                        titleLabel.setText("Te vaak verkeerde pincode!");
+                        passcodeField.setEditable(false);
+                        submitButton.setEnabled(false);
                     }
                 }
             }
-        }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(new Color(252, 212, 68));
+        buttonPanel.add(submitButton);
+        centerPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        add(centerPanel, BorderLayout.CENTER);
+
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        new SnelOpnemen();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new StartFrame();
+            }
+        });
     }
 }

@@ -66,7 +66,7 @@ public class StartFrame extends JFrame {
         // Add the imagePanel to the GUI
         add(imagePanel, BorderLayout.NORTH);
 
-        submitButton = new JButton("Submit");
+        submitButton = new JButton("Enter");
         submitButton.setFont(new Font("Arial", Font.BOLD, 30));
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +106,7 @@ public class StartFrame extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new StartFrame();
+                new MainFrame();
             }
         });
     }

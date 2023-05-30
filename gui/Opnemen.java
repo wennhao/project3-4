@@ -10,7 +10,6 @@ class Opnemen extends JFrame {
         getContentPane().setBackground(new Color(252, 212, 68));
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setPreferredSize(new Dimension(1500, 1080));
         mainPanel.setBackground(new Color(252, 212, 68));
 
         JPanel topPanel = new JPanel();
@@ -19,12 +18,15 @@ class Opnemen extends JFrame {
 
         ImageIcon imageIcon = new ImageIcon("../gui/binglogo.PNG");
 
+        // Create a JLabel with the image
         JLabel imageLabel = new JLabel(imageIcon);
 
+        // Create a panel with FlowLayout to center the imageLabel
         JPanel imagePanel = new JPanel(new FlowLayout());
         imagePanel.setBackground(new Color(252, 212, 68));
         imagePanel.add(imageLabel);
 
+        // Add the imagePanel to the GUI
         add(imagePanel, BorderLayout.NORTH);
 
         JLabel titleLabel = new JLabel("SaldoChecker");
@@ -41,34 +43,32 @@ class Opnemen extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 0, 0);
 
-        JPanel leftPanel = new JPanel();
+        JPanel leftPanel = new JPanel(new GridLayout(7, 1));
         leftPanel.setPreferredSize(new Dimension(200, 0));
         leftPanel.setBackground(new Color(252, 212, 68));
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        leftPanel.add(Box.createVerticalGlue());
+        leftPanel.add(new JLabel("")); // Add empty row basically blank space between buttons
 
         JButton buttonBack = new JButton("Terug");
         buttonBack.setFont(new Font("Arial", Font.BOLD, 30));
-        buttonBack.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonBack.setPreferredSize(new Dimension(200, 50));
+        buttonBack.setPreferredSize(new Dimension(200, 100));
         buttonBack.setBackground(Color.WHITE);
         buttonBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                // Code to open a new frame for Button on the left side corner.
                 dispose();
                 new MainFrame();
             }
         });
         leftPanel.add(buttonBack);
-        leftPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JButton buttonAfbreken = new JButton("Afbreken");
         buttonAfbreken.setFont(new Font("Arial", Font.BOLD, 30));
-        buttonAfbreken.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonAfbreken.setPreferredSize(new Dimension(200, 50));
+        buttonAfbreken.setPreferredSize(new Dimension(200, 100));
         buttonAfbreken.setBackground(Color.WHITE);
         buttonAfbreken.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                // Code to open a new frame for Button on the left side corner.
                 dispose();
                 new StartFrame();
             }
@@ -92,34 +92,40 @@ class Opnemen extends JFrame {
         centerInnerPanel.add(bedragTextField, gbc);
 
         gbc.gridy++;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
         JButton opnemenButton = new JButton("Opnemen");
         opnemenButton.setFont(new Font("Arial", Font.BOLD, 30));
-        opnemenButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        opnemenButton.setPreferredSize(new Dimension(200, 50));
-        opnemenButton.setBackground(Color.WHITE);
+        opnemenButton.setPreferredSize(new Dimension(200, 100));
+        opnemenButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String bedragText = bedragTextField.getText();
+                if (bedragText.isEmpty()) {
+                    JOptionPane.showMessageDialog(Opnemen.this, "Voer een bedrag in.", "Fout", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
+                        double bedrag = Double.parseDouble(bedragText);
+                        if (bedrag > 250) {
+                            JOptionPane.showMessageDialog(Opnemen.this, "Het limiet om te pinnen is 250 euro.", "Limiet overschreden", JOptionPane.WARNING_MESSAGE);
+                        } else if (bedrag % 5 == 0) {
+                            int check = (int) (bedrag / 5);
+                            JOptionPane.showMessageDialog(Opnemen.this, "Je hebt " + bedrag + " euro opgenomen.", "Opname succesvol", JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
+                            new EindScherm();
+                        } else {
+                            JOptionPane.showMessageDialog(Opnemen.this, "Het bedrag moet deelbaar zijn door 5.", "Fout", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(Opnemen.this, "Ongeldig bedrag.", "Fout", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
         centerInnerPanel.add(opnemenButton, gbc);
 
-        gbc.gridy++;
-        JLabel resultLabel = new JLabel("");
-        resultLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        centerInnerPanel.add(resultLabel, gbc);
-
-        centerPanel.add(centerInnerPanel);
+        centerPanel.add(centerInnerPanel, gbc);
 
         mainPanel.add(centerPanel, BorderLayout.NORTH);
 
         add(mainPanel);
-
-        // Set the size and position of the buttons
-        buttonBack.setPreferredSize(new Dimension(200, 50));
-        buttonAfbreken.setPreferredSize(new Dimension(200, 50));
-        buttonBack.setMaximumSize(new Dimension(200, 50));
-        buttonAfbreken.setMaximumSize(new Dimension(200, 50));
-
-        pack();
-        setLocationRelativeTo(null);
 
         setVisible(true);
     }

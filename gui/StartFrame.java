@@ -153,6 +153,6 @@ public class StartFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainFrame());
+        SwingUtilities.invokeLater(() -> new Opnemen());
     }
 }

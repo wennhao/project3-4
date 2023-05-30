@@ -8,7 +8,8 @@ public class EindScherm extends JFrame {
     private JProgressBar progressBar;
 
     public EindScherm() {
-        setSize(500, 400);
+        setTitle("Eindscherm");
+        setSize(1900, 845);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the frame on the screen
 
@@ -25,7 +26,7 @@ public class EindScherm extends JFrame {
         panel.add(imageLabel, BorderLayout.NORTH);
 
         // Create a JLabel for the text
-        JLabel textLabel = new JLabel("Bedankt voor het pinnen bij Bin.G!");
+        JLabel textLabel = new JLabel("Bedankt voor het gebruik maken van Bin.G!");
         textLabel.setFont(new Font("Arial", Font.BOLD, 30));
         textLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(textLabel, BorderLayout.CENTER);

@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 class SnelOpnemen extends JFrame {
     public SnelOpnemen() {
-
+        setTitle("SnelOpnemen");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -42,7 +42,7 @@ class SnelOpnemen extends JFrame {
         buttonAfbreken.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new BeginScherm();
+                new EindScherm();
             }
         });
         leftPanel.add(buttonAfbreken);

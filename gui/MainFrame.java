@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 class MainFrame extends JFrame {
     public MainFrame() {
-
+        setTitle("MainFrame");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -24,7 +24,8 @@ class MainFrame extends JFrame {
         button1.setBackground(Color.WHITE);
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Code to open a new frame for Button 1
+                dispose();
+                new SaldoChecker();
             }
         });
         leftPanel.add(button1);
@@ -41,7 +42,7 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Code to open a new frame for Button 2
                 dispose();
-                new BeginScherm();
+                new EindScherm();
             }
         });
         leftPanel.add(button2);
@@ -113,7 +114,7 @@ class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Code to open a new frame for Button 5
                 dispose();
-                new BeginScherm();
+                new EindScherm();
             }
         });
         rightPanel.add(button5);

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -116,14 +119,20 @@ public class BeginScherm extends JFrame {
                                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                                 int statusCode = response.statusCode();
 
+                                // Inside the try block, after receiving the response
                                 if (statusCode == 200) {
                                     String responseData = response.body();
-                                    // Process the JSON response and use the user data in your Java Swing GUI
-                                    // ...
                                     System.out.println(responseData); // Example: Print the response data
-                                } else {
-                                    // Handle the response error
-                                    System.out.println("Error: " + statusCode);
+
+                                    // Parse the JSON response to extract the pin code
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(responseData);
+                                        String pincode = jsonObject.getString("pincode");
+                                        SharedData.pincode = pincode;
+                                        System.out.println("Pin code: " + pincode);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             } catch (IOException | InterruptedException ex) {
                                 ex.printStackTrace();

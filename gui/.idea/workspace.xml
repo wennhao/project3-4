@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a29619fc-a0ec-4688-bf93-f8b5fa6f91a9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sharedData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BeginScherm.java" beforeDir="false" afterPath="$PROJECT_DIR$/BeginScherm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/gui/BeginScherm$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/BeginScherm$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gui/BeginScherm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/BeginScherm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gui/gui.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/gui.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/gui/sharedData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/sharedData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sharedData.java" beforeDir="false" afterPath="$PROJECT_DIR$/SharedData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

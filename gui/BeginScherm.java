@@ -1,21 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.net.URI;
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.URI;
+
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 
 public class BeginScherm extends JFrame {
     private JLabel label;
+    private JLabel scannedCardLabel;
     private Timer timer;
     private String dots;
     private SerialPort serialPort;
-    private BufferedReader input;
+    private StringBuilder cardNumberBuilder;
 
     public BeginScherm() {
         setTitle("BeginScherm");
@@ -29,6 +30,12 @@ public class BeginScherm extends JFrame {
         label.setFont(new Font("Arial", Font.BOLD, 40));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         add(label, BorderLayout.CENTER);
+
+        // Create a JLabel to display the scanned card number
+        scannedCardLabel = new JLabel("");
+        scannedCardLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        scannedCardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(scannedCardLabel, BorderLayout.NORTH);
 
         // Set initial dots string
         dots = "";
@@ -53,75 +60,85 @@ public class BeginScherm extends JFrame {
         imagePanel.add(imageLabel);
 
         // Add the imagePanel to the GUI
-        add(imagePanel, BorderLayout.NORTH);
+        add(imagePanel, BorderLayout.CENTER);
 
-        JButton button = new JButton("Als RFID gescand is");
-        button.addActionListener(e -> {
-            dispose();
-            new StartFrame();
-        });
-        add(button, BorderLayout.SOUTH);
+        // Retrieve available serial ports
+        SerialPort[] ports = SerialPort.getCommPorts();
+
+        // Find the selected port (replace "COM1" with your Arduino's port name)
+        SerialPort selectedPort = SerialPort.getCommPort("cu.usbmodem2401");
+
+        if (selectedPort.openPort()) {
+            System.out.println("Serial port opened successfully");
+            label.setText("Scanning card...");
+
+            cardNumberBuilder = new StringBuilder();
+
+            final SerialPort finalSelectedPort = selectedPort; // Create a final copy of the selectedPort
+
+            // Configure event listener to read data from the serial port
+            selectedPort.addDataListener(new SerialPortDataListener() {
+                @Override
+                public int getListeningEvents() {
+                    return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+                }
+
+                @Override
+                public void serialEvent(SerialPortEvent event) {
+                    if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
+                        byte[] newData = new byte[finalSelectedPort.bytesAvailable()];
+                        int numRead = finalSelectedPort.readBytes(newData, newData.length);
+
+                        // Append the received data to the cardNumberBuilder
+                        cardNumberBuilder.append(new String(newData, 0, numRead));
+
+                        // Check if the received data contains a complete message
+                        if (cardNumberBuilder.toString().contains("\n")) {
+                            // Extract the card number
+                            String scannedCardNumber = cardNumberBuilder.toString().trim();
+
+                            // Remove any remaining data from the cardNumberBuilder
+                            cardNumberBuilder.setLength(0);
+
+                            System.out.println("Scanned card number: " + scannedCardNumber);
+
+                            // Update the scanned card label
+                            SwingUtilities.invokeLater(() -> scannedCardLabel.setText("Scanned Card: " + scannedCardNumber));
+
+                            // Send a GET request to retrieve user data based on the scanned card number
+                            HttpClient client = HttpClient.newHttpClient();
+                            HttpRequest request = HttpRequest.newBuilder()
+                                    .uri(URI.create("http://145.24.222.171:8888/users/card/" + scannedCardNumber))
+                                    .GET()
+                                    .build();
+
+                            try {
+                                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                                int statusCode = response.statusCode();
+
+                                if (statusCode == 200) {
+                                    String responseData = response.body();
+                                    // Process the JSON response and use the user data in your Java Swing GUI
+                                    // ...
+                                    System.out.println(responseData); // Example: Print the response data
+                                } else {
+                                    // Handle the response error
+                                    System.out.println("Error: " + statusCode);
+                                }
+                            } catch (IOException | InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            System.out.println("Failed to open the serial port");
+        }
 
         // Start the timer
         timer.start();
         setVisible(true);
-
-        // Initialize RFID scanner
-        initialize();
-    }
-
-    private void initialize() {
-        SerialPort[] ports = SerialPort.getCommPorts();
-        SerialPort selectedPort = null;
-
-        for (SerialPort port : ports) {
-            if (port.getSystemPortName().equals("/dev/cu.usbmodem2401")) { // Replace with your Arduino port
-                selectedPort = port;
-                break;
-            }
-        }
-
-        if (selectedPort == null) {
-            System.out.println("Could not find COM port.");
-            return;
-        }
-
-        selectedPort.openPort();
-        selectedPort.setBaudRate(9600);
-        selectedPort.addDataListener(new SerialPortDataListener() {
-            @Override
-            public int getListeningEvents() {
-                return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
-            }
-
-            @Override
-            public void serialEvent(SerialPortEvent event) {
-                if (event.getEventType() == SerialPort.LISTENING_EVENT_DATA_RECEIVED) {
-                    byte[] newData = event.getReceivedData();
-                    String inputLine = new String(newData).trim();
-                    System.out.println("RFID Card Number: " + inputLine);
-
-                    // Perform GET request to your Flask API and update the label text
-                    String apiUrl = "http://145.24.222.171:8888/users" + inputLine;
-                    HttpClient client = HttpClient.newHttpClient();
-                    HttpRequest request = HttpRequest.newBuilder()
-                            .uri(URI.create(apiUrl))
-                            .GET()
-                            .build();
-
-                    try {
-                        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                        String cardInfo = response.body();
-
-                        SwingUtilities.invokeLater(() -> label.setText(cardInfo)); // Update label text in the Swing event dispatch thread
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        input = new BufferedReader(new InputStreamReader(selectedPort.getInputStream()));
     }
 
     public static void main(String[] args) {

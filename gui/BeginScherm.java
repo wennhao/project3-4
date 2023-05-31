@@ -130,6 +130,8 @@ public class BeginScherm extends JFrame {
                                         String pincode = jsonObject.getString("pincode");
                                         SharedData.pincode = pincode;
                                         System.out.println("Pin code: " + pincode);
+                                        new StartFrame();
+                                        dispose();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

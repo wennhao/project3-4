@@ -104,7 +104,7 @@ public class StartFrame extends JFrame {
     private void setupSerial() {
         SerialPort[] ports = SerialPort.getCommPorts();
         for (SerialPort port : ports) {
-            if (port.getSystemPortName().equals("COM8")) {
+            if (port.getSystemPortName().equals("cu.usbmodem2401")) {
                 serialPort = port;
                 break;
             }
@@ -130,7 +130,7 @@ public class StartFrame extends JFrame {
                             pinField.setText(password.toString());
                         });
                         if (password.length() == 4) {
-                            if (password.toString().equals("1234")) {
+                            if (password.toString().equals(SharedData.pincode)) {
                                 SwingUtilities.invokeLater(this::handleCorrectPIN);
                             } else {
                                 SwingUtilities.invokeLater(this::handleIncorrectPIN);

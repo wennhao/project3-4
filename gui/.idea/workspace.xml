@@ -6,9 +6,34 @@
   <component name="ChangeListManager">
     <list default="true" id="a29619fc-a0ec-4688-bf93-f8b5fa6f91a9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BeginScherm.java" beforeDir="false" afterPath="$PROJECT_DIR$/BeginScherm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BeginScherm$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BeginScherm$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BeginScherm$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BeginScherm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EindScherm$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EindScherm$DotPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EindScherm$ProgressBarPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/EindScherm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frame2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SnelOpnemen.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StartFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StartFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StartFrame$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StartFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StartFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/StartFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/gui/BeginScherm$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/BeginScherm$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gui/BeginScherm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/BeginScherm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/gui/StartFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/gui/StartFrame.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

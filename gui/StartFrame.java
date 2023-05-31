@@ -3,6 +3,8 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import com.fazecast.jSerialComm.SerialPort;
+import com.sun.tools.javac.Main;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
@@ -129,11 +131,11 @@ public class StartFrame extends JFrame {
                         });
                         if (password.length() == 4) {
                             if (password.toString().equals("1234")) {
-                                SwingUtilities.invokeLater(() -> handleCorrectPIN());
+                                SwingUtilities.invokeLater(this::handleCorrectPIN);
                             } else {
-                                SwingUtilities.invokeLater(() -> handleIncorrectPIN());
+                                SwingUtilities.invokeLater(this::handleIncorrectPIN);
                             }
-                            password = new StringBuilder(); // Reset the password after evaluating
+                            password.setLength(0); // Reset the password after evaluating
                         }
                     }
                 } catch (IOException ex) {
@@ -152,7 +154,22 @@ public class StartFrame extends JFrame {
         new MainFrame();
     }
 
+    @Override
+    public void dispose() {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (serialPort != null && serialPort.isOpen()) {
+            serialPort.closePort();
+        }
+        super.dispose();
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Opnemen());
+        SwingUtilities.invokeLater(StartFrame::new);
     }
 }

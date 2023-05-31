@@ -18,7 +18,7 @@ public class BeginScherm extends JFrame {
     private JLabel scannedCardLabel;
     private Timer timer;
     private String dots;
-    private SerialPort serialPort;
+    private SerialPort selectedPort;
     private StringBuilder cardNumberBuilder;
 
     public BeginScherm() {
@@ -69,7 +69,7 @@ public class BeginScherm extends JFrame {
         SerialPort[] ports = SerialPort.getCommPorts();
 
         // Find the selected port (replace "COM1" with your Arduino's port name)
-        SerialPort selectedPort = SerialPort.getCommPort("cu.usbmodem2401");
+        selectedPort = SerialPort.getCommPort("cu.usbmodem2401");
 
         if (selectedPort.openPort()) {
             System.out.println("Serial port opened successfully");
@@ -130,6 +130,7 @@ public class BeginScherm extends JFrame {
                                         String pincode = jsonObject.getString("pincode");
                                         SharedData.pincode = pincode;
                                         System.out.println("Pin code: " + pincode);
+                                        closeSerialPort();
                                         new StartFrame();
                                         dispose();
                                     } catch (JSONException e) {
@@ -155,4 +156,11 @@ public class BeginScherm extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(BeginScherm::new);
     }
+
+    public void closeSerialPort() {
+        if (selectedPort != null && selectedPort.isOpen()) {
+            selectedPort.closePort();
+        }
+    }
+
 }

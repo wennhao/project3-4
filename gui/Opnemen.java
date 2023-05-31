@@ -6,6 +6,17 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortIOException;
+import com.sun.java.accessibility.util.EventID;
+import com.sun.tools.javac.Main;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class Opnemen extends JFrame {
     private JTextField bedragTextField;
     private SerialPort serialPort;
@@ -13,127 +24,115 @@ public class Opnemen extends JFrame {
     private boolean isListening;
 
     public Opnemen() {
+        setTitle("Opnemen");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        getContentPane().setBackground(new Color(252, 212, 68));
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBackground(new Color(252, 212, 68));
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.BLACK);
 
-        JPanel topPanel = new JPanel();
-        topPanel.setPreferredSize(new Dimension(1920, 200));
-        topPanel.setBackground(new Color(252, 212, 68));
-
-        ImageIcon imageIcon = new ImageIcon("../gui/binglogo.PNG");
-        JLabel imageLabel = new JLabel(imageIcon);
-
-        JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new FlowLayout());
-        imagePanel.setBackground(new Color(252, 212, 68));
-        imagePanel.add(imageLabel);
-        add(imagePanel, BorderLayout.NORTH);
-
-        JLabel titleLabel = new JLabel("SaldoChecker");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        topPanel.add(titleLabel);
-
-        mainPanel.add(topPanel, BorderLayout.NORTH);
-
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridBagLayout());
-        centerPanel.setBackground(new Color(252, 212, 68));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(20, 0, 0, 0);
-
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new GridLayout(7, 1));
-        leftPanel.setPreferredSize(new Dimension(200, 0));
+        JPanel leftPanel = new JPanel(new GridLayout(7, 1));
+        leftPanel.setPreferredSize(new Dimension(250, 0));
         leftPanel.setBackground(new Color(252, 212, 68));
 
-        leftPanel.add(new JLabel(""));
+        // Add empty space to left panel
+        for (int i = 0; i < 3; i++) {
+            leftPanel.add(new JLabel(""));
+        }
 
-        JButton buttonBack = new JButton("Terug");
-        buttonBack.setFont(new Font("Arial", Font.BOLD, 30));
-        buttonBack.setPreferredSize(new Dimension(200, 100));
-        buttonBack.setBackground(Color.WHITE);
-        buttonBack.addActionListener(new ActionListener() {
+        JButton button1 = new JButton("Terug");
+        button1.setFont(new Font("Arial", Font.BOLD, 25));
+        button1.setPreferredSize(new Dimension(230, 70));
+        button1.setMinimumSize(new Dimension(230, 70));
+        button1.setBackground(Color.WHITE);
+        button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                closeSerialPort();
                 dispose();
                 new MainFrame();
             }
         });
-        leftPanel.add(buttonBack);
+        leftPanel.add(button1);
+        leftPanel.add(new JLabel(""));
 
-        JButton buttonAfbreken = new JButton("Afbreken");
-        buttonAfbreken.setFont(new Font("Arial", Font.BOLD, 30));
-        buttonAfbreken.setPreferredSize(new Dimension(200, 100));
-        buttonAfbreken.setBackground(Color.WHITE);
-        buttonAfbreken.addActionListener(new ActionListener() {
+        JButton button2 = new JButton("Afbreken");
+        button2.setFont(new Font("Arial", Font.BOLD, 25));
+        button2.setPreferredSize(new Dimension(230, 70));
+        button2.setMinimumSize(new Dimension(230, 70));
+        button2.setBackground(Color.WHITE);
+        button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                closeSerialPort();
                 dispose();
-                new StartFrame();
+                new EindScherm();
             }
         });
-        leftPanel.add(buttonAfbreken);
-
+        leftPanel.add(button2);
         mainPanel.add(leftPanel, BorderLayout.WEST);
 
-        JPanel centerInnerPanel = new JPanel();
-        centerInnerPanel.setLayout(new GridBagLayout());
-        centerInnerPanel.setBackground(new Color(252, 212, 68));
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(new Color(252, 212, 68));
 
-        gbc.gridy++;
-        gbc.anchor = GridBagConstraints.NORTH;
-        JLabel bedragLabel = new JLabel("Bedrag:");
-        bedragLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        centerInnerPanel.add(bedragLabel, gbc);
+        // Load the image from file
+        ImageIcon imageIcon = new ImageIcon("binglogo.PNG");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerPanel.add(imageLabel);
 
-        gbc.gridy++;
-        bedragTextField = new JTextField(10);
-        bedragTextField.setFont(new Font("Arial", Font.PLAIN, 30));
-        centerInnerPanel.add(bedragTextField, gbc);
+        JLabel keuzeLabel = new JLabel("Welkom maak uw keuze");
+        keuzeLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        keuzeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        keuzeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.add(keuzeLabel);
 
-        gbc.gridy++;
-        JButton opnemenButton = new JButton("Opnemen");
-        opnemenButton.setFont(new Font("Arial", Font.BOLD, 30));
-        opnemenButton.setPreferredSize(new Dimension(250, 70));
-        opnemenButton.setBackground(Color.WHITE);
-        opnemenButton.addActionListener(new ActionListener() {
+        // Create JTextField
+        bedragTextField = new JTextField();
+        bedragTextField.setFont(new Font("Arial", Font.BOLD, 24));
+        bedragTextField.setMaximumSize(new Dimension(500, 50));
+        bedragTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerPanel.add(bedragTextField);
+
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel(new GridLayout(7, 1));
+        rightPanel.setPreferredSize(new Dimension(250, 0));
+        rightPanel.setBackground(new Color(252, 212, 68));
+
+        // Add empty space to right panel
+        for (int i = 0; i < 5; i++) {
+            rightPanel.add(new JLabel(""));
+        }
+
+        JButton button3 = new JButton("Bedrag Opnemen");
+        button3.setFont(new Font("Arial", Font.BOLD, 25 ));
+        button3.setPreferredSize(new Dimension(230, 70));
+        button3.setMinimumSize(new Dimension(230, 70));
+        button3.setBackground(Color.WHITE);
+        button3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String bedrag = bedragTextField.getText();
-                // Voer de nodige logica uit om bedrag op te nemen
+                closeSerialPort();
+                dispose();
+                new EindScherm();
             }
         });
-        centerInnerPanel.add(opnemenButton, gbc);
+        rightPanel.add(button3);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
 
-        centerPanel.add(centerInnerPanel, gbc);
+        // Call your setupSerial method here
+        setupSerial();
 
-        mainPanel.add(centerPanel, BorderLayout.NORTH);
-
-        add(mainPanel);
-
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                stopListening(); // Stop listening for keypad input
-                closeSerialPort(); // Close the serial port
-            }
-        });
-
+        setContentPane(mainPanel);
         setVisible(true);
     }
-
     private void setupSerial() {
         SerialPort[] ports = SerialPort.getCommPorts();
         serialPort = null;
         boolean errorDisplayed = false; // Flag to keep track of whether the error has been displayed
         for (SerialPort port : ports) {
-            if (port.getSystemPortName().equals("COM8")) {
+            if (port.getSystemPortName().equals("cu.usbmodem2401")) {
                 serialPort = port;
                 break;
             }
@@ -145,16 +144,21 @@ public class Opnemen extends JFrame {
             }
             return;
         }
-        serialPort.setBaudRate(9600);
-        if (!serialPort.isOpen()) {
-            serialPort.openPort();
-        }
-        inputStream = serialPort.getInputStream();
-        isListening = true;
 
+        if (serialPort.isOpen() || serialPort.openPort()) {
+            serialPort.setBaudRate(9600);
+            inputStream = serialPort.getInputStream();
+            isListening = true;
+            startListening();
+        } else {
+            System.err.println("Could not open COM port.");
+        }
+    }
+
+    private void startListening() {
         new Thread(() -> {
             StringBuilder number = new StringBuilder();
-            while (isListening) {
+            while (isListening && serialPort != null && serialPort.isOpen()) {
                 try {
                     int data = inputStream.read();
                     char c = (char) data;
@@ -163,13 +167,31 @@ public class Opnemen extends JFrame {
                         SwingUtilities.invokeLater(() -> {
                             bedragTextField.setText(number.toString());
                         });
+                    } else if (c == 'C') {
+                        // Remove the last character from number
+                        if (number.length() > 0) {
+                            number.deleteCharAt(number.length() - 1);
+                        }
+                        SwingUtilities.invokeLater(() -> {
+                            bedragTextField.setText(number.toString());
+                        });
+                    } else if (c == 'B') {
+                        // Clear the number
+                        number.setLength(0);
+                        SwingUtilities.invokeLater(() -> {
+                            bedragTextField.setText("");
+                        });
                     }
+                } catch (SerialPortIOException ex) {
+                    System.err.println("Serial Port appears to have been shutdown or disconnected. Stopping listener thread.");
+                    stopListening();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         }).start();
     }
+
 
     private void stopListening() {
         isListening = false;
@@ -183,10 +205,27 @@ public class Opnemen extends JFrame {
                 ex.printStackTrace();
             }
         }
-        if (serialPort != null && serialPort.isOpen()) {
+        if (serialPort != null) {
             serialPort.closePort();
         }
     }
+
+    @Override
+    public void dispose() {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (serialPort != null && serialPort.isOpen()) {
+            serialPort.closePort();
+        }
+        super.dispose();
+    }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Opnemen::new);
